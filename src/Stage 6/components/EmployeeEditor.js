@@ -8,15 +8,35 @@ class EmployeeEditor extends Component {
       originalEmployee: null,
       notModified: true
     };
+    this.save = this.save.bind(this)
+    this.cancel = this.cancel.bind(this)
   }
 
-  // componentWillReceiveProps
+   componentWillReceiveProps(props){
+     this.setState({employee: props.selected, originalEmployee: props.selected, notModified: true})
+   }
 
-  // handleChange
+   handleChange(prop, value){
+     if(this.state.notModified){
+       this.setState({notModified:false})
+     }
+     let employeeCopy = Object.assign({}, this.state.employee)
+     employeeCopy[prop] = value
+     this.setState({employee:employeeCopy})
+   }
 
-  // save
+   save(){
+     this.state.originalEmployee.updateName(this.state.employee.name) //why can we call these functions? 
+     this.state.originalEmployee.updatePhone(this.state.employee.phone)
+     this.state.originalEmployee.updateTitle(this.state.employee.title)
+     this.setState({notModified: true})
+     this.props.refreshList(); //where did this props come from? 
+   }
 
-  // cancel
+   cancel(){
+     let employeeCopy = Object.assign({},this.state.originalEmployee)
+     this.setState({employee: employeeCopy, notModified: true})
+   }
   
   render() {
     return (
